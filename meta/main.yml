@@ -1,0 +1,13 @@
+galaxy_info:
+  author: logan
+  description: Installation of BIRD BGP daemon
+  license: Apache2
+  min_ansible_version: 1.6.6
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  categories:
+    - networking
+    - bgp
+dependencies: []

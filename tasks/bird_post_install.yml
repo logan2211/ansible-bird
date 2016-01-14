@@ -1,0 +1,52 @@
+---
+
+- name: Drop bird configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: bird_results
+  when: hostvars[inventory_hostname]['ansible_default_' + item.network]
+  with_items:
+    - { src: "bird.conf.j2", dest: "/etc/bird/bird.conf", network: "ipv4", service: "bird" }
+    - { src: "bird6.conf.j2", dest: "/etc/bird/bird6.conf", network: "ipv6", service: "bird6" }
+  tags:
+    - bird-config
+
+- name: Disable inactive BIRD BGP services and remove from bootup start
+  service:
+   name: "{{ item.service }}"
+   enabled: no
+   state: stopped
+  when: not hostvars[inventory_hostname]['ansible_default_' + item.network]
+  with_items:
+    - { service: bird, network: ipv4 }
+    - { service: bird6, network: ipv6 }
+  tags:
+    - upstart-init
+    - bird-init
+
+- name: Start active BIRD BGP services and add to bootup start
+  service:
+   name: "{{ item.service }}"
+   enabled: yes
+   state: started
+  when: hostvars[inventory_hostname]['ansible_default_' + item.network]
+  with_items:
+    - { service: bird, network: ipv4 }
+    - { service: bird6, network: ipv6 }
+  tags:
+    - upstart-init
+    - bird-init
+
+- name: Restart bird services
+  service:
+    name: "{{ item.item.service }}"
+    state: restarted
+  when: item.changed
+  with_items: bird_results.results
+  tags:
+    - upstart-init
+    - bird-init

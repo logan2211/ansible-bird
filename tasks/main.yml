@@ -1,0 +1,5 @@
+---
+
+- include: bird_pre_install.yml
+- include: bird_install.yml
+- include: bird_post_install.yml
