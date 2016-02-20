@@ -23,8 +23,8 @@ bird_advertise_interfaces:
 
 #the default ipv4 session we configure is toward the default gateway
 bird_bgp_ipv4_peers:
-  - "{{ ansible_default_ipv4['gateway'] }}"
+  - ip: "{{ ansible_default_ipv4['gateway'] }}"
 
 #the default ipv6 session we configure is toward the ipv6 subnet gateway routable address
 bird_bgp_ipv6_peers:
-  - "{{ ((ansible_default_ipv6['address'] ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('network') ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('net') | ipaddr(1) | ipaddr('address') }}"
+  - ip: "{{ ((ansible_default_ipv6['address'] ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('network') ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('net') | ipaddr(1) | ipaddr('address') }}"

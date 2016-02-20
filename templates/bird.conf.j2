@@ -42,16 +42,20 @@ protocol direct {
 }
 
 # Peer with route reflector.
-protocol bgp UPLINK {
+{% for peer in bird_bgp_ipv4_peers %}
+protocol bgp{% if peer.name is defined %} {{ peer.name }}{% endif %} {
   description "Connection to BGP route reflector";
   local as {{ bird_bgp_asn }};
-  {% for peer in bird_bgp_ipv4_peers -%}
-    neighbor {{ peer }} as {{ bird_bgp_asn }};
-  {% endfor -%}
+  neighbor {{ peer.ip }} as {{ peer.asn | default(bird_bgp_asn) }};
   multihop;
   import none;
   export filter export_bgp;
   next hop self;    # Disable next hop processing and always advertise our
                     # local address as nexthop
+{% if peer.source_ip is defined %}
+  source address {{ peer.source_ip }};  # The local address we use for the TCP connection
+{% else %}
   source address {{ bird_bgp_ipv4_source | default(ansible_default_ipv4['address']) }};  # The local address we use for the TCP connection
+{% endif %}
 }
+{% endfor %}
