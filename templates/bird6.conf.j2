@@ -14,6 +14,11 @@ router id {{ bird_bgp_router_id }};
 # We should automate the build of this out of variables when
 # we have time.
 
+{% for name, filter in bird_ipv6_filters.iteritems() %}
+filter {{ name }} {
+  {{ filter | indent(2) }}
+}
+{% endfor %}
 filter export_bgp {
   if ( {% for i in bird_advertise_interfaces %}(ifname ~ "{{ i }}"){% if not loop.last %} || {% endif %}{% endfor %} ) then {
     if  net != ::/0 then accept;
@@ -47,9 +52,10 @@ protocol bgp{% if peer.name is defined %} {{ peer.name }}{% endif %} {
   description "Connection to BGP route reflector";
   local as {{ bird_bgp_asn }};
   neighbor {{ peer.ip }} as {{ peer.asn | default(bird_bgp_asn) }};
-  multihop;
-  import none;
-  export filter export_bgp;
+  direct;
+  gateway direct;
+  import {% if peer.import_filter is defined %}filter {{ peer.import_filter }}{% else %}none{% endif %};
+  export {% if peer.export_filter is defined %}filter {{ peer.export_filter }}{% else %}none{% endif %};
   next hop self;    # Disable next hop processing and always advertise our
                     # local address as nexthop
 {% if peer.source_ip is defined %}

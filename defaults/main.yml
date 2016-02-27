@@ -24,7 +24,27 @@ bird_advertise_interfaces:
 #the default ipv4 session we configure is toward the default gateway
 bird_bgp_ipv4_peers:
   - ip: "{{ ansible_default_ipv4['gateway'] }}"
+    import_filter: import_bgp
+    export_filter: export_bgp
 
 #the default ipv6 session we configure is toward the ipv6 subnet gateway routable address
 bird_bgp_ipv6_peers:
   - ip: "{{ ((ansible_default_ipv6['address'] ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('network') ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('net') | ipaddr(1) | ipaddr('address') }}"
+    export_filter: export_bgp
+
+bird_ipv4_filters:
+  export_bgp: |
+    if ( {% for i in bird_advertise_interfaces %}(ifname ~ "{{ i }}"){% if not loop.last %} || {% endif %}{% endfor %} ) then {
+      if  net != 0.0.0.0/0 then accept;
+    }
+    reject;
+  import_bgp: |
+    if net = 0.0.0.0/0 then accept;
+    reject;
+
+bird_ipv6_filters:
+  export_bgp: |
+    if ( {% for i in bird_advertise_interfaces %}(ifname ~ "{{ i }}"){% if not loop.last %} || {% endif %}{% endfor %} ) then {
+      if  net != ::/0 then accept;
+    }
+    reject;
