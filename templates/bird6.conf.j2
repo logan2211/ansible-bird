@@ -19,12 +19,6 @@ filter {{ name }} {
   {{ filter | indent(2) }}
 }
 {% endfor %}
-filter export_bgp {
-  if ( {% for i in bird_advertise_interfaces %}(ifname ~ "{{ i }}"){% if not loop.last %} || {% endif %}{% endfor %} ) then {
-    if  net != ::/0 then accept;
-  }
-  reject;
-}
 
 # Configure synchronization between BIRD's routing tables and the
 # kernel.
