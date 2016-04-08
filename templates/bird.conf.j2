@@ -26,8 +26,9 @@ protocol kernel {
   learn;          # Learn all alien routes from the kernel
   persist;        # Don't remove routes on bird shutdown
   scan time 2;    # Scan kernel routing table every 2 seconds
-  import all;
-  export all;     # Default is export none
+  import {% if bird_kernel_ipv4_import_filter is defined %}filter {{ bird_kernel_ipv4_import_filter }}{% else %}all{% endif %};
+  export {% if bird_kernel_ipv4_export_filter is defined %}filter {{ bird_kernel_ipv4_export_filter }}{% else %}all{% endif %};
+  merge paths;
 }
 
 # Watch interface up/down events.
