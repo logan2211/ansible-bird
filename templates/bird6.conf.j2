@@ -46,6 +46,9 @@ protocol bgp{% if peer.name is defined %} {{ peer.name }}{% endif %} {
   description "Connection to BGP route reflector";
   local as {{ bird_bgp_asn }};
   neighbor {{ peer.ip }} as {{ peer.asn | default(bird_bgp_asn) }};
+  hold time 15;
+  graceful restart;
+  check link;
   direct;
   gateway direct;
   import {% if peer.import_filter is defined %}filter {{ peer.import_filter }}{% else %}none{% endif %};
