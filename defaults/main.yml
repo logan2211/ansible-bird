@@ -27,8 +27,6 @@ bird_bgp_ipv4_peers:
     import_filter: import_bgp
     export_filter: export_bgp
 
-bird_kernel_ipv4_export_filter: 'export_kernel'
-
 #the default ipv6 session we configure is toward the ipv6 subnet gateway routable address
 bird_bgp_ipv6_peers:
   - ip: "{{ ((ansible_default_ipv6['address'] ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('network') ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('net') | ipaddr(1) | ipaddr('address') }}"
@@ -41,10 +39,8 @@ bird_ipv4_filters:
     }
     reject;
   import_bgp: |
-    accept;
-  export_kernel: |
-    krt_prefsrc = {{ ansible_dummy1.ipv4.address }};
-    accept;
+    if net = 0.0.0.0/0 then accept;
+    reject;
 
 bird_ipv6_filters:
   export_bgp: |
