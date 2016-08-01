@@ -8,7 +8,9 @@
     group: "root"
     mode: "0644"
   register: bird_results
-  when: hostvars[inventory_hostname]['ansible_default_' + item.network]
+  when:
+    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network] is defined }}"
+    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network]['scope'] == 'global' if item.network == 'ipv6' else True }}"
   with_items:
     - { src: "bird.conf.j2", dest: "/etc/bird/bird.conf", network: "ipv4", service: "bird" }
     - { src: "bird6.conf.j2", dest: "/etc/bird/bird6.conf", network: "ipv6", service: "bird6" }
@@ -20,7 +22,9 @@
    name: "{{ item.service }}"
    enabled: no
    state: stopped
-  when: not hostvars[inventory_hostname]['ansible_default_' + item.network]
+  when:
+    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network] is not defined
+       or (hostvars[inventory_hostname]['ansible_default_' + item.network]['scope'] != 'global' if item.network == 'ipv6' else False) }}"
   with_items:
     - { service: bird, network: ipv4 }
     - { service: bird6, network: ipv6 }
@@ -33,7 +37,9 @@
    name: "{{ item.service }}"
    enabled: yes
    state: started
-  when: hostvars[inventory_hostname]['ansible_default_' + item.network]
+  when:
+    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network] is defined }}"
+    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network]['scope'] == 'global' if item.network == 'ipv6' else True }}"
   with_items:
     - { service: bird, network: ipv4 }
     - { service: bird6, network: ipv6 }
