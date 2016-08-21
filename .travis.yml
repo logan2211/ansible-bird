@@ -1,0 +1,14 @@
+language: python
+sudo: required
+dist: trusty
+install:
+  - pip install tox
+script:
+  - tox
+env:
+  - TOXENV=linters
+  - TOXENV=functional
+notifications:
+  slack:
+    rooms:
+      secure: uGk3oNKE6M7h+c2wMurecULb73tyyhkjM3J/FwlDr7a7SO2kM4Vki5+4UFJV3x7k0TQ2+U5Iu2m63oaAHtiEWqiVJEIIuYKu3oH/mPnVHVilU8t4elZ4d6IQo2UEzM0B0HmkUA5A6o5TJt0Y4msXHq4jXYoy6/+ot8qWzSfgpER5H1/woMFIVrmlAursVfoDB2yIOoGSFRS5P3CjoPa2yEFpPYemsiUsDClj+blt4iXqgH9Uc65Gucen1a5KnxjJsPwzXJhWcIB8CpHCFsOGOguk+tvFlJxtFuAWRNEvk59tMX82pAzIOKNmu4cL9Y4EnCPJNYT8c8NWvJoPuxfJU6THZ8S+WDIJdWSlENWyGqebDiOJkVtXBe6+YMPt5afuoUlD++usCEO9EOTajpJZcNnz8fMhsFYjn0eMn5jStCIWO/4W8JFShNFwQ3HLuJ9/EZYDvGWSIn4XXhU+wbM90BM+TeZqAdzWcsKN6TqUm3G8d5jrVGFteb1W85LB3MFVaJCdrsjwYVrFl71ojaxK7NBuzUZYgOTtDd6MC6FtkAfVyWzEfpa5rGge8TT/TwbhBVYCWOB29Ax/DgPXUtH2AaJv8on3q2R2vkmEoB7y6uz4BddPwbGR2sMz19IIj/i+KbOlQ+xtzoa+e+CTUdSJW72LSJ+1sLoKYOYz6mTU7cg=
