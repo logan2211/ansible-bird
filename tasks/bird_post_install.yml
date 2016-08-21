@@ -13,6 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Set fact for automatically enabling networks (IPv4)
+  set_fact:
+    bird_ipv4_enabled: True
+  when:
+    - "{{ bird_ipv4_enabled is not defined }}"
+    - "{{ ansible_default_ipv4 is defined }}"
+
+- name: Set fact for automatically enabling networks (IPv6)
+  set_fact:
+    bird_ipv6_enabled: True
+  when:
+    - "{{ bird_ipv6_enabled is not defined }}"
+    - "{{ ansible_default_ipv6 is defined }}"
+    - "{{ ansible_default_ipv6['scope'] is defined }}"
+    - "{{ ansible_default_ipv6['scope'] == 'global' }}"
+
 - name: Drop bird configuration files
   template:
     src: "{{ item.src }}"
@@ -21,12 +37,18 @@
     group: "root"
     mode: "0644"
   register: bird_results
-  when:
-    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network] is defined }}"
-    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network]['scope'] == 'global' if item.network == 'ipv6' else True }}"
+  when: "{{ item.enabled | bool }}"
   with_items:
-    - { src: "bird.conf.j2", dest: "/etc/bird/bird.conf", network: "ipv4", service: "bird" }
-    - { src: "bird6.conf.j2", dest: "/etc/bird/bird6.conf", network: "ipv6", service: "bird6" }
+    - src: "bird.conf.j2"
+      dest: "/etc/bird/bird.conf"
+      network: "ipv4"
+      service: "bird"
+      enabled: "{{ bird_ipv4_enabled | bool }}"
+    - src: "bird6.conf.j2"
+      dest: "/etc/bird/bird6.conf"
+      network: "ipv6"
+      service: "bird6"
+      enabled: "{{ bird_ipv6_enabled | bool }}"
   tags:
     - bird-config
 
@@ -35,12 +57,14 @@
    name: "{{ item.service }}"
    enabled: no
    state: stopped
-  when:
-    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network] is not defined
-       or (hostvars[inventory_hostname]['ansible_default_' + item.network]['scope'] != 'global' if item.network == 'ipv6' else False) }}"
+  when: "{{ not item.enabled | bool }}"
   with_items:
-    - { service: bird, network: ipv4 }
-    - { service: bird6, network: ipv6 }
+    - service: bird
+      network: ipv4
+      enabled: "{{ bird_ipv4_enabled | bool }}"
+    - service: bird6
+      network: ipv6
+      enabled: "{{ bird_ipv6_enabled | bool }}"
   tags:
     - upstart-init
     - bird-init
@@ -50,12 +74,14 @@
    name: "{{ item.service }}"
    enabled: yes
    state: started
-  when:
-    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network] is defined }}"
-    - "{{ hostvars[inventory_hostname]['ansible_default_' + item.network]['scope'] == 'global' if item.network == 'ipv6' else True }}"
+  when: "{{ item.enabled | bool }}"
   with_items:
-    - { service: bird, network: ipv4 }
-    - { service: bird6, network: ipv6 }
+    - service: bird
+      network: ipv4
+      enabled: "{{ bird_ipv4_enabled | bool }}"
+    - service: bird6
+      network: ipv6
+      enabled: "{{ bird_ipv6_enabled | bool }}"
   tags:
     - upstart-init
     - bird-init
