@@ -29,6 +29,7 @@ protocol kernel {
   import {% if bird_kernel_ipv4_import_filter is defined %}filter {{ bird_kernel_ipv4_import_filter }}{% else %}all{% endif %};
   export {% if bird_kernel_ipv4_export_filter is defined %}filter {{ bird_kernel_ipv4_export_filter }}{% else %}none{% endif %};
   merge paths;
+  kernel table {% if bird_kernel_table is defined %} {{ bird_kernel_table }}{% else%}254{% endif %};
 }
 
 # Watch interface up/down events.
@@ -54,6 +55,8 @@ protocol bgp{% if peer.name is defined %} {{ peer.name }}{% endif %} {
   gateway direct;
   import {% if peer.import_filter is defined %}filter {{ peer.import_filter }}{% else %}none{% endif %};
   export {% if peer.export_filter is defined %}filter {{ peer.export_filter }}{% else %}none{% endif %};
+  {% if peer.password is defined %}password "{{ peer.password }}";{% else %}{% endif %}
+
   next hop self;    # Disable next hop processing and always advertise our
                     # local address as nexthop
 {% if peer.source_ip is defined %}
