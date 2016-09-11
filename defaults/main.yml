@@ -15,6 +15,8 @@
 
 bird_package_state: latest
 
+bird_conf_dir: /etc/bird
+
 bird_gpg_keys:
   - key_name: 'bird'
     keyserver: 'hkp://keyserver.ubuntu.com:80'
@@ -29,7 +31,6 @@ bird_apt_repo:
 bird_apt_packages:
   - bird
 
-bird_bgp_asn: 65535
 bird_bgp_router_id: "{{ ansible_default_ipv4['address'] }}"
 
 # Auto-enable bird/bird6 if an ipv4/ipv6 default route is present
@@ -37,36 +38,33 @@ bird_bgp_router_id: "{{ ansible_default_ipv4['address'] }}"
 bird_ipv4_enabled: detect
 bird_ipv6_enabled: detect
 
-#configure bird to advertise subnets bound to these interface wildcards
-bird_advertise_interfaces:
-  - 'tap*'
-  - 'cali*'
-  - 'dummy1'
+bird_configs:
+  - config_file: "{{ bird_conf_dir }}/bird.conf"
+    enabled: "{{ bird_ipv4_enabled }}"
+    service: bird
+    includes: "{{ bird_ipv4_includes }}"
+    filters: "{{ bird_ipv4_filters }}"
+    protocols: "{{ bird_ipv4_protocols }}"
+  - config_file: "{{ bird_conf_dir }}/bird6.conf"
+    enabled: "{{ bird_ipv6_enabled }}"
+    service: bird6
+    includes: "{{ bird_ipv6_includes }}"
+    filters: "{{ bird_ipv6_filters }}"
+    protocols: "{{ bird_ipv6_protocols }}"
 
-#the default ipv4 session we configure is toward the default gateway
-bird_bgp_ipv4_peers:
-  - ip: "{{ ansible_default_ipv4['gateway'] }}"
-    import_filter: import_bgp
-    export_filter: export_bgp
+bird_ipv4_includes: []
+bird_ipv4_filters: {}
+bird_ipv4_protocols: "{{ bird_default_protocols }}"
 
-#the default ipv6 session we configure is toward the ipv6 subnet gateway routable address
-bird_bgp_ipv6_peers:
-  - ip: "{{ ((ansible_default_ipv6['address'] ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('network') ~ '/' ~ ansible_default_ipv6['prefix']) | ipaddr('net') | ipaddr(1) | ipaddr('address') }}"
-    export_filter: export_bgp
+bird_ipv6_includes: []
+bird_ipv6_filters: {}
+bird_ipv6_protocols: "{{ bird_default_protocols }}"
 
-bird_ipv4_filters:
-  export_bgp: |
-    if ( {% for i in bird_advertise_interfaces %}(ifname ~ "{{ i }}"){% if not loop.last %} || {% endif %}{% endfor %} ) then {
-      if  net != 0.0.0.0/0 then accept;
-    }
-    reject;
-  import_bgp: |
-    if net = 0.0.0.0/0 then accept;
-    reject;
-
-bird_ipv6_filters:
-  export_bgp: |
-    if ( {% for i in bird_advertise_interfaces %}(ifname ~ "{{ i }}"){% if not loop.last %} || {% endif %}{% endfor %} ) then {
-      if  net != ::/0 then accept;
-    }
-    reject;
+bird_default_protocols:
+  kernel: "{{ bird_protocols_kernel }}"
+  device: "{{ bird_protocols_device }}"
+bird_protocols_kernel: |
+  scan time 60;
+  import none;
+bird_protocols_device: |
+  scan time 60;
