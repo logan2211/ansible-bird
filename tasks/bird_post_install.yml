@@ -20,6 +20,7 @@
     - "{{ bird_ipv4_enabled == 'detect' }}"
   tags:
     - bird-config
+    - bird-init
 
 - name: Set fact for automatically enabling networks (IPv6)
   set_fact:
@@ -31,29 +32,30 @@
     - "{{ bird_ipv6_enabled == 'detect' }}"
   tags:
     - bird-config
+    - bird-init
 
 - name: Drop bird configuration files
   template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: bird-common.conf.j2
+    dest: "{{ item.config_file }}"
     owner: "root"
     group: "root"
     mode: "0644"
   register: bird_results
   when: "{{ item.enabled | bool }}"
-  with_items:
-    - src: "bird.conf.j2"
-      dest: "/etc/bird/bird.conf"
-      network: "ipv4"
-      service: "bird"
-      enabled: "{{ bird_ipv4_enabled }}"
-    - src: "bird6.conf.j2"
-      dest: "/etc/bird/bird6.conf"
-      network: "ipv6"
-      service: "bird6"
-      enabled: "{{ bird_ipv6_enabled }}"
+  with_items: "{{ bird_configs }}"
   tags:
     - bird-config
+
+- name: Restart bird services
+  service:
+    name: "{{ item.item.service }}"
+    state: restarted
+  when: "{{ item | changed }}"
+  with_items: "{{ bird_results.results }}"
+  tags:
+    - upstart-init
+    - bird-init
 
 - name: Disable inactive BIRD BGP services and remove from bootup start
   service:
@@ -61,13 +63,7 @@
    enabled: no
    state: stopped
   when: "{{ not item.enabled | bool }}"
-  with_items:
-    - service: bird
-      network: ipv4
-      enabled: "{{ bird_ipv4_enabled }}"
-    - service: bird6
-      network: ipv6
-      enabled: "{{ bird_ipv6_enabled }}"
+  with_items: "{{ bird_configs }}"
   tags:
     - upstart-init
     - bird-init
@@ -78,23 +74,7 @@
    enabled: yes
    state: started
   when: "{{ item.enabled | bool }}"
-  with_items:
-    - service: bird
-      network: ipv4
-      enabled: "{{ bird_ipv4_enabled }}"
-    - service: bird6
-      network: ipv6
-      enabled: "{{ bird_ipv6_enabled }}"
-  tags:
-    - upstart-init
-    - bird-init
-
-- name: Restart bird services
-  service:
-    name: "{{ item.item.service }}"
-    state: restarted
-  when: item.changed
-  with_items: "{{ bird_results.results }}"
+  with_items: "{{ bird_configs }}"
   tags:
     - upstart-init
     - bird-init
