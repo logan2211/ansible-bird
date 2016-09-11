@@ -15,19 +15,22 @@
 
 - name: Set fact for automatically enabling networks (IPv4)
   set_fact:
-    bird_ipv4_enabled: True
+    bird_ipv4_enabled: "{{ ansible_default_ipv4 is defined | bool }}"
   when:
-    - "{{ bird_ipv4_enabled is not defined }}"
-    - "{{ ansible_default_ipv4 is defined }}"
+    - "{{ bird_ipv4_enabled == 'detect' }}"
+  tags:
+    - bird-config
 
 - name: Set fact for automatically enabling networks (IPv6)
   set_fact:
-    bird_ipv6_enabled: True
+    bird_ipv6_enabled: >
+      {{ (ansible_default_ipv6 is defined
+         and ansible_default_ipv6['scope'] is defined
+         and ansible_default_ipv6['scope'] == 'global') | bool }}
   when:
-    - "{{ bird_ipv6_enabled is not defined }}"
-    - "{{ ansible_default_ipv6 is defined }}"
-    - "{{ ansible_default_ipv6['scope'] is defined }}"
-    - "{{ ansible_default_ipv6['scope'] == 'global' }}"
+    - "{{ bird_ipv6_enabled == 'detect' }}"
+  tags:
+    - bird-config
 
 - name: Drop bird configuration files
   template:
@@ -43,12 +46,12 @@
       dest: "/etc/bird/bird.conf"
       network: "ipv4"
       service: "bird"
-      enabled: "{{ bird_ipv4_enabled | default('False') }}"
+      enabled: "{{ bird_ipv4_enabled }}"
     - src: "bird6.conf.j2"
       dest: "/etc/bird/bird6.conf"
       network: "ipv6"
       service: "bird6"
-      enabled: "{{ bird_ipv6_enabled | default('False') }}"
+      enabled: "{{ bird_ipv6_enabled }}"
   tags:
     - bird-config
 
@@ -61,10 +64,10 @@
   with_items:
     - service: bird
       network: ipv4
-      enabled: "{{ bird_ipv4_enabled | default('False') }}"
+      enabled: "{{ bird_ipv4_enabled }}"
     - service: bird6
       network: ipv6
-      enabled: "{{ bird_ipv6_enabled | default('False') }}"
+      enabled: "{{ bird_ipv6_enabled }}"
   tags:
     - upstart-init
     - bird-init
@@ -78,10 +81,10 @@
   with_items:
     - service: bird
       network: ipv4
-      enabled: "{{ bird_ipv4_enabled | default('False') }}"
+      enabled: "{{ bird_ipv4_enabled }}"
     - service: bird6
       network: ipv6
-      enabled: "{{ bird_ipv6_enabled | default('False') }}"
+      enabled: "{{ bird_ipv6_enabled }}"
   tags:
     - upstart-init
     - bird-init
