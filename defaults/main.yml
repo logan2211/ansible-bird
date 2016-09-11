@@ -32,6 +32,11 @@ bird_apt_packages:
 bird_bgp_asn: 65535
 bird_bgp_router_id: "{{ ansible_default_ipv4['address'] }}"
 
+# Auto-enable bird/bird6 if an ipv4/ipv6 default route is present
+# Set to true/false to override auto detection
+bird_ipv4_enabled: detect
+bird_ipv6_enabled: detect
+
 #configure bird to advertise subnets bound to these interface wildcards
 bird_advertise_interfaces:
   - 'tap*'
