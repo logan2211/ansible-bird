@@ -43,12 +43,12 @@
       dest: "/etc/bird/bird.conf"
       network: "ipv4"
       service: "bird"
-      enabled: "{{ bird_ipv4_enabled | bool }}"
+      enabled: "{{ bird_ipv4_enabled | default('False') }}"
     - src: "bird6.conf.j2"
       dest: "/etc/bird/bird6.conf"
       network: "ipv6"
       service: "bird6"
-      enabled: "{{ bird_ipv6_enabled | bool }}"
+      enabled: "{{ bird_ipv6_enabled | default('False') }}"
   tags:
     - bird-config
 
@@ -61,10 +61,10 @@
   with_items:
     - service: bird
       network: ipv4
-      enabled: "{{ bird_ipv4_enabled | bool }}"
+      enabled: "{{ bird_ipv4_enabled | default('False') }}"
     - service: bird6
       network: ipv6
-      enabled: "{{ bird_ipv6_enabled | bool }}"
+      enabled: "{{ bird_ipv6_enabled | default('False') }}"
   tags:
     - upstart-init
     - bird-init
@@ -78,10 +78,10 @@
   with_items:
     - service: bird
       network: ipv4
-      enabled: "{{ bird_ipv4_enabled | bool }}"
+      enabled: "{{ bird_ipv4_enabled | default('False') }}"
     - service: bird6
       network: ipv6
-      enabled: "{{ bird_ipv6_enabled | bool }}"
+      enabled: "{{ bird_ipv6_enabled | default('False') }}"
   tags:
     - upstart-init
     - bird-init
