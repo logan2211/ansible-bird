@@ -1,0 +1,76 @@
+---
+# Copyright 2016, Logan Vig <logan2211@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Add BIRD yum key
+  rpm_key:
+    state: present
+    key: "{{ item.url }}"
+  register: add_keys
+  until: add_keys|success
+  retries: 5
+  delay: 2
+  with_items: "{{ bird_keys }}"
+  when: "{{ bird_package_source == 'bird' }}"
+  tags:
+    - bird-keys
+
+#TODO(logan) Remove this task once we move to Ansible 2.1
+# where we can leverage the `yum_repository` module:
+# https://docs.ansible.com/ansible/yum_repository_module.html
+- name: Add BIRD repo
+  copy:
+    content: |
+      [{{ item.name }}]
+      name={{ item.name }}
+      description={{ item.description }}
+      baseurl={{ item.baseurl }}
+      gpgkey={{ item.gpgkey }}
+      gpgcheck=1
+      enabled=1
+    dest: "/etc/yum.repos.d/{{ item.file }}.repo"
+  register: add_repos
+  until: add_repos|success
+  retries: 5
+  delay: 2
+  with_items:
+    - "{{ bird_repo }}"
+  when: "{{ bird_package_source == 'bird' }}"
+  tags:
+    - bird-repos
+
+- name: Install BIRD yum pre packages
+  yum:
+    pkg: "{{ item }}"
+    state: "{{ bird_package_state }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: "{{ bird_required_packages }}"
+  when: "{{ bird_package_source == 'epel' }}"
+  tags:
+    - bird-yum-packages
+
+- name: Install BIRD yum packages
+  yum:
+    pkg: "{{ item }}"
+    state: "{{ bird_package_state }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: "{{ bird_packages }}"
+  tags:
+    - bird-yum-packages
