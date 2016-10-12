@@ -91,7 +91,7 @@
     name: "{{ item.item.service }}"
     state: restarted
   when: item.changed
-  with_items: bird_results.results
+  with_items: "{{ bird_results.results }}"
   tags:
     - upstart-init
     - bird-init
