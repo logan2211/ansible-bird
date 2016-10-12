@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-router id {{ bird_bgp_router_id }};
+router id {{ bird_router_id }};
 
 {% for include in item.includes %}
 include "{{ include }}";
