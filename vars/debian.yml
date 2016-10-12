@@ -13,16 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: bird_install_apt.yml
-  static: no
-  when:
-    - ansible_pkg_mgr == 'apt'
-  tags:
-    - install-apt
+## APT Cache Options
+cache_timeout: 600
 
-- include: bird_install_yum.yml
-  static: no
-  when:
-    - ansible_pkg_mgr == 'yum'
-  tags:
-    - install-yum
+bird_keys:
+  - key_name: 'bird'
+    url: http://bird.network.cz/debian/apt.key
+    hash_id: '4A7A714D'
+
+bird_apt_repo_url: http://bird.network.cz/debian/
+bird_repo:
+  repo: "deb {{ bird_apt_repo_url }} {{ ansible_distribution_release }} main"
+  state: "present"
+
+bird_required_packages: []
+bird_packages:
+  - bird

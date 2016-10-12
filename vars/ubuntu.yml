@@ -13,16 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: bird_install_apt.yml
-  static: no
-  when:
-    - ansible_pkg_mgr == 'apt'
-  tags:
-    - install-apt
+## APT Cache Options
+cache_timeout: 600
 
-- include: bird_install_yum.yml
-  static: no
-  when:
-    - ansible_pkg_mgr == 'yum'
-  tags:
-    - install-yum
+bird_keys:
+  - key_name: 'bird'
+    keyserver: 'hkp://keyserver.ubuntu.com:80'
+    fallback_keyserver: 'hkp://p80.pool.sks-keyservers.net:80'
+    hash_id: '0xf2331238f9c59a45'
+
+bird_apt_repo_url: "http://ppa.launchpad.net/cz.nic-labs/bird/ubuntu"
+bird_repo:
+  repo: "deb {{ bird_apt_repo_url }} {{ ansible_distribution_release }} main"
+  state: "present"
+
+bird_required_packages: []
+bird_packages:
+  - bird

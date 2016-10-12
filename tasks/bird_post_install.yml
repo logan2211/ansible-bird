@@ -62,7 +62,9 @@
    name: "{{ item.service }}"
    enabled: no
    state: stopped
-  when: "{{ not item.enabled | bool }}"
+  when:
+    - "{{ not item.enabled | bool }}"
+    - "{{ item.enabled != 'skip' }}"
   with_items: "{{ bird_configs }}"
   tags:
     - upstart-init
@@ -73,7 +75,9 @@
    name: "{{ item.service }}"
    enabled: yes
    state: started
-  when: "{{ item.enabled | bool }}"
+  when:
+    - "{{ item.enabled | bool }}"
+    - "{{ item.enabled != 'skip' }}"
   with_items: "{{ bird_configs }}"
   tags:
     - upstart-init
