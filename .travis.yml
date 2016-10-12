@@ -7,7 +7,9 @@ script:
   - tox
 env:
   - TOXENV=linters
-  - TOXENV=functional
+  - TOXENV=functional_1.9.4
+  - TOXENV=functional_2.1.0
+  - TOXENV=functional_stable
 notifications:
   slack:
     rooms:
