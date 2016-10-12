@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+bird_package_state: latest
+
 bird_gpg_keys:
   - key_name: 'bird'
     keyserver: 'hkp://keyserver.ubuntu.com:80'
