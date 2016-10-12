@@ -31,7 +31,7 @@ bird_apt_repo:
 bird_apt_packages:
   - bird
 
-bird_bgp_router_id: "{{ ansible_default_ipv4['address'] }}"
+bird_router_id: "{{ ansible_default_ipv4['address'] }}"
 
 # Auto-enable bird/bird6 if an ipv4/ipv6 default route is present
 # Set to true/false to override auto detection
