@@ -24,7 +24,7 @@
 
 - name: Set fact for automatically enabling networks (IPv6)
   set_fact:
-    bird_ipv6_enabled: >
+    bird_ipv6_enabled: >-
       {{ (ansible_default_ipv6 is defined
          and ansible_default_ipv6['scope'] is defined
          and ansible_default_ipv6['scope'] == 'global') | bool }}
