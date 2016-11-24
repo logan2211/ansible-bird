@@ -16,6 +16,7 @@
 # Detect whether the init system is upstart of systemd.
 - name: Check init system
   command: cat /proc/1/comm
+  always_run: yes
   changed_when: false
   register: _pid1_name
   tags:
