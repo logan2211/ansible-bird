@@ -52,6 +52,7 @@
     name: "{{ item.item.service }}"
     state: restarted
   when: "{{ item | changed }}"
+  ignore_errors: "{{ ansible_check_mode | default(false) }}"
   with_items: "{{ bird_results.results }}"
   tags:
     - upstart-init
@@ -66,6 +67,7 @@
     - "{{ not item.enabled | bool }}"
     - "{{ item.enabled != 'skip' }}"
   with_items: "{{ bird_configs }}"
+  ignore_errors: "{{ ansible_check_mode | default(false) }}"
   tags:
     - upstart-init
     - bird-init
@@ -79,6 +81,7 @@
     - "{{ item.enabled | bool }}"
     - "{{ item.enabled != 'skip' }}"
   with_items: "{{ bird_configs }}"
+  ignore_errors: "{{ ansible_check_mode | default(false) }}"
   tags:
     - upstart-init
     - bird-init
