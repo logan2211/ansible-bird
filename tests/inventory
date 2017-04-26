@@ -1,2 +1,13 @@
 [all]
-localhost ansible_connection=local ansible_become=True ansible_ssh_host=127.0.0.1
+localhost ansible_connection=local ansible_become=True
+
+[test_containers]
+bird physical_host=localhost
+
+[docker_containers:children]
+test_containers
+
+[docker_containers:vars]
+ansible_connection=docker
+docker_privileged=yes
+docker_user=root
