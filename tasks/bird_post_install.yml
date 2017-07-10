@@ -17,7 +17,7 @@
   set_fact:
     bird_ipv4_enabled: "{{ ansible_default_ipv4 is defined | bool }}"
   when:
-    - "{{ bird_ipv4_enabled == 'detect' }}"
+    - "bird_ipv4_enabled == 'detect'"
   tags:
     - bird-config
     - bird-init
@@ -29,7 +29,7 @@
          and ansible_default_ipv6['scope'] is defined
          and ansible_default_ipv6['scope'] == 'global') | bool }}
   when:
-    - "{{ bird_ipv6_enabled == 'detect' }}"
+    - "bird_ipv6_enabled == 'detect'"
   tags:
     - bird-config
     - bird-init
@@ -42,7 +42,7 @@
     group: "root"
     mode: "0644"
   register: bird_results
-  when: "{{ item.enabled | bool }}"
+  when: "item.enabled | bool"
   with_items: "{{ bird_configs }}"
   tags:
     - bird-config
@@ -51,7 +51,7 @@
   service:
     name: "{{ item.item.service }}"
     state: restarted
-  when: "{{ item | changed }}"
+  when: "item | changed"
   ignore_errors: "{{ ansible_check_mode | default(false) }}"
   with_items: "{{ bird_results.results }}"
   tags:
@@ -64,8 +64,8 @@
    enabled: no
    state: stopped
   when:
-    - "{{ not item.enabled | bool }}"
-    - "{{ item.enabled != 'skip' }}"
+    - "not item.enabled | bool"
+    - "item.enabled != 'skip'"
   with_items: "{{ bird_configs }}"
   ignore_errors: "{{ ansible_check_mode | default(false) }}"
   tags:
@@ -78,8 +78,8 @@
    enabled: yes
    state: started
   when:
-    - "{{ item.enabled | bool }}"
-    - "{{ item.enabled != 'skip' }}"
+    - "item.enabled | bool"
+    - "item.enabled != 'skip'"
   with_items: "{{ bird_configs }}"
   ignore_errors: "{{ ansible_check_mode | default(false) }}"
   tags:
