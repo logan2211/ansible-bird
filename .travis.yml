@@ -41,6 +41,10 @@ env:
       docker_image_tag=ubuntu-xenial
       CACHE_NAME=xenial
     - >
+      TOXENV=functional_stable_py3
+      docker_image_tag=ubuntu-xenial
+      CACHE_NAME=xenial
+    - >
       TOXENV=functional_stable
       docker_image_tag=centos-7
       CACHE_NAME=cent7
