@@ -9,7 +9,7 @@ services:
 env:
   global:
     - ANSIBLE_FORCE_COLOR=1
-    - docker_image=logan2211/docker-ci
+    - docker_image=quay.io/loganv/docker-ci
     - docker_command=/lib/systemd/systemd
     - cache_dir=$HOME/.docker
   matrix:
@@ -66,4 +66,4 @@ notifications:
   email: false
   slack:
     rooms:
-      secure: NZHaWM5nDxbToME+LzgxjNyMomEQQaex1rgjBo36125ZTB6hUZCh7/tUFtc5qtVBG6gOdX9xkqK77jPClD07MtwugBPqAGS6gNhdcalnmIBZnPE4vqRKlM3jrsFQlSd9AOJfTsNiG4NK/q/IJpMcSENovspewsPFQQVd2vHZ0gQtT9IUusbZpDhFpejsuTWOq8sYczWdq8QAmyFlDyknOzQYgWVvXYohFHXw5eFlvO9e0xIXU7vd5MhFwjIe8n1rUzAsiHZrXhW4Fve7I4wQ/yV1GzrCZT8fxu1/YrSRg2eJh6lT7rbFD47TDSh9jLg2a4Nh1wdxXYk50irTKU6l7zaY6PHXd4mAmnWeNkSa6w02BfOsZl8q07AlVCcaD1ttk35x+j+K1MtFXpge7z/S2xl9ygg36F0RoEuQnfIO88F8gnc7hpROCePWQTy9Fl4PFkbEPfyrGpSdQQ64Fpu6mXvs987JEqri0DFdrGXzivs/SIkEpFRVplyHVaDVP6Nv1gmPTX7OheXCCdKNlG9xIQLJGeL6E2Jb5l6xRmaylgi9BjMbRIWM1qz+O4NFDOVW63JqZ+pcDmrQmE9rSYIpUZ2dI4I87evX2OJgZxcMTbltRnDxLJsUGWCiGxfl9CC/KdgcuGY8a57v54b/PH8aRoQd0FPRE00FOron6Hj1TeA=
+      secure: rATdUHj3tZvC0bJVe/t0+Dbfgb6+huZYttgFEOXH+plagwwcIpa8JsvKP9jiAe0D0HTL4haPB4cK7JxJNK7/utup7z4VvIWfU1YuhaZFOYyjOQ/FHeu1m8PpMtc4d7ehTVKeZkPfj7aJ3qN/jMFOWQ6QKM1Aqo5EdhStMhlbpXRrQEDLq9C/veI7M8rvOveduoo5KZ5jC+sX25K03C1afUEBntqLXnFPJlBYYrVCqcEhS0v2CmZeZofI31zl2PLLEmJtUtyGXm7w699Aefsy0jeKcoiyxfn13fAMXXFuZZQP245L8KLbKu+z5EknXaSQdyGMycpoV2YKaTQujaNYO27DsWqbn41U6gR5RS+ywyQ6f9hWajGVip3cMD/awn27qviwL2EwF/kQUtdiw5j3a1sX2fAspG+UiA+sIF4le8WX7OxA6YLguF6esT24ilGqAHiOs2UJ6z9CWAHOK3+SwskX5FcljIHMPVi4stcyiKZSDzpcbxfW6ptpTEKujJKoudmI/m8jCaa5tDBNpUz3lUpxY4NE+8EzMq0EKomTKlXFRGVe2g/b4i5a3cLXpaM7aKAnl0WVKolAsVymPwbiv9msCfgrB3UvwBoLlboaI5Swf5LC/J2HDWqg1Mue8Z0pRX+IS2+SE7aMhgV3Zwn3SWiQ5H1m5P1yLdyA/0z+kaQ=
