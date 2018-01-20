@@ -19,9 +19,9 @@ bird_package_source: bird
 #bird configurations are stored in /etc on RHEL instead of /etc/bird
 bird_conf_dir: /etc
 
-bird_keys: https://copr-be.cloud.fedoraproject.org/results/logan2211/bird/pubkey.gpg
+bird_keys: http://rpm.knot-dns.cz/redhat/RPM-GPG-KEY-network.cz
 
-bird_yum_repo_url: https://copr-be.cloud.fedoraproject.org/results/logan2211/bird/epel-7-$basearch/
+bird_yum_repo_url: ftp://bird.network.cz/pub/bird/centos/7/
 bird_repo:
   state: present
   name: bird
