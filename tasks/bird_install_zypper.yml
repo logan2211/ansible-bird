@@ -44,6 +44,16 @@
   tags:
     - bird-repos
 
+- name: Disable repo metadata GPG check for BIRD
+  command: "zypper mr --gpgcheck-allow-unsigned-repo --refresh {{ item.name }}"
+  with_items:
+    - "{{ bird_repo }}"
+  when:
+    - bird_package_source == 'bird'
+    - not item.repo_gpg_check | default('yes') | bool
+  tags:
+    - bird-repos
+
 - name: Install BIRD zypper packages
   zypper:
     name: "{{ item }}"
