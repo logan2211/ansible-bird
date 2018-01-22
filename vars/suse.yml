@@ -31,6 +31,7 @@ bird_repo:
   description: COPR repository for BIRD packages on CentOS 7
   baseurl: "{{ bird_yum_repo_url }}"
   gpgkey: "{{ bird_keys }}"
+  repo_gpg_check: no
 
 
 bird_required_packages: []
