@@ -6,55 +6,82 @@ cache:
     - $HOME/.docker
 services:
   - docker
+
+_ubuntu_build: &ubuntu_build
+  docker_image_tag: ubuntu-xenial
+  CACHE_NAME: xenial
+  TOXENV: functional_stable
+
+_centos_build: &centos_build
+  docker_image_tag: centos-7
+  CACHE_NAME: cent7
+  TOXENV: functional_stable
+
+_opensuse_build: &opensuse_build
+  docker_image_tag: opensuse-42.3
+  docker_command: /usr/lib/systemd/systemd
+  CACHE_NAME: suse43
+  TOXENV: functional_stable
+
 env:
   global:
     - ANSIBLE_FORCE_COLOR=1
     - docker_image=quay.io/loganv/docker-ci
     - docker_command=/lib/systemd/systemd
     - cache_dir=$HOME/.docker
-  matrix:
-    # LINTERS
-    - TOXENV=linters
-      CACHE_NAME=linters
-    # ANSIBLE 2.1 (NEWTON)
-    - >
-      TOXENV=functional_2.1
-      docker_image_tag=ubuntu-trusty
-      docker_command=/sbin/init
-      CACHE_NAME=trusty
-    - >
-      TOXENV=functional_2.1
-      docker_image_tag=ubuntu-xenial
-      CACHE_NAME=xenial
-    # ANSIBLE 2.2 (OCATA)
-    - >
-      TOXENV=functional_2.2
-      docker_image_tag=ubuntu-xenial
-      CACHE_NAME=xenial
-    - >
-      TOXENV=functional_2.2
-      docker_image_tag=centos-7
-      CACHE_NAME=cent7
-    # ANSIBLE stable (OSA MASTER)
-    - >
-      TOXENV=functional_stable
-      docker_image_tag=ubuntu-xenial
-      CACHE_NAME=xenial
-    - >
-      TOXENV=functional_stable
-      docker_image_tag=centos-7
-      CACHE_NAME=cent7
-    - >
-      TOXENV=functional_stable
-      docker_image_tag=opensuse-42.3
-      CACHE_NAME=suse42
-      docker_command=/usr/lib/systemd/systemd
+
+matrix:
+  fast_finish: true
+  include:
+    - env:
+        TOXENV: linters
+        CACHE_NAME: linters
+    # ANSIBLE 2.3
+    - env:
+        <<: *ubuntu_build
+        TOXENV: functional_2.3
+    - env:
+        <<: *centos_build
+        TOXENV: functional_2.3
+    - env:
+        <<: *opensuse_build
+        TOXENV: functional_2.3
+    # ANSIBLE 2.4
+    - env:
+        <<: *ubuntu_build
+        TOXENV: functional_2.4
+    - env:
+        <<: *centos_build
+        TOXENV: functional_2.4
+    - env:
+        <<: *opensuse_build
+        TOXENV: functional_2.4
+    # ANSIBLE 2.5
+    - env:
+        <<: *ubuntu_build
+        TOXENV: functional_2.5
+    - env:
+        <<: *centos_build
+        TOXENV: functional_2.5
+    - env:
+        <<: *opensuse_build
+        TOXENV: functional_2.5
+    # ANSIBLE STABLE
+    - env:
+        <<: *ubuntu_build
+    - env:
+        <<: *centos_build
+    - env:
+        <<: *opensuse_build
+
 before_install:
   # Load cached docker images
   - if [[ -d ${cache_dir} ]]; then ls ${cache_dir}/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
   - if [[ -n ${docker_image_tag} ]]; then docker pull ${docker_image}:${docker_image_tag}; fi
 install:
   - pip install tox
+before_script:
+  - curl -o ${PWD}/tox.ini https://gist.githubusercontent.com/Logan2211/c5f38423b085fbea78392f1ee10700d5/raw/tox.ini
 script:
   - tox
 before_cache:
