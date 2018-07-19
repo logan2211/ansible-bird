@@ -15,7 +15,7 @@
 
 - name: Ensure docker-py is installed
   pip:
-    name: docker-py
+    name: docker
 
 - name: Ensure docker container
   docker_container:
