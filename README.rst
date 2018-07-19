@@ -3,8 +3,8 @@ BIRD Ansible Role
 
 Ansible role to install and configure BIRD BGP daemon
 
-.. image:: https://travis-ci.org/Logan2211/ansible-bird.svg?branch=master
-    :target: https://travis-ci.org/Logan2211/ansible-bird
+.. image:: https://travis-ci.org/logan2211/ansible-bird.svg?branch=master
+    :target: https://travis-ci.org/logan2211/ansible-bird
 
 Default Variables
 =================
