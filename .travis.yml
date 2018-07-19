@@ -7,8 +7,13 @@ cache:
 services:
   - docker
 
-_ubuntu_build: &ubuntu_build
+_ubuntu_xenial_build: &ubuntu_xenial_build
   docker_image_tag: ubuntu-xenial
+  CACHE_NAME: xenial
+  TOXENV: functional_stable
+
+_ubuntu_bionic_build: &ubuntu_bionic_build
+  docker_image_tag: ubuntu-bionic
   CACHE_NAME: xenial
   TOXENV: functional_stable
 
@@ -38,7 +43,10 @@ matrix:
         CACHE_NAME: linters
     # ANSIBLE 2.3
     - env:
-        <<: *ubuntu_build
+        <<: *ubuntu_xenial_build
+        TOXENV: functional_2.3
+    - env:
+        <<: *ubuntu_bionic_build
         TOXENV: functional_2.3
     - env:
         <<: *centos_build
@@ -48,7 +56,10 @@ matrix:
         TOXENV: functional_2.3
     # ANSIBLE 2.4
     - env:
-        <<: *ubuntu_build
+        <<: *ubuntu_xenial_build
+        TOXENV: functional_2.4
+    - env:
+        <<: *ubuntu_bionic_build
         TOXENV: functional_2.4
     - env:
         <<: *centos_build
@@ -58,7 +69,10 @@ matrix:
         TOXENV: functional_2.4
     # ANSIBLE 2.5
     - env:
-        <<: *ubuntu_build
+        <<: *ubuntu_xenial_build
+        TOXENV: functional_2.5
+    - env:
+        <<: *ubuntu_bionic_build
         TOXENV: functional_2.5
     - env:
         <<: *centos_build
@@ -68,7 +82,9 @@ matrix:
         TOXENV: functional_2.5
     # ANSIBLE STABLE
     - env:
-        <<: *ubuntu_build
+        <<: *ubuntu_xenial_build
+    - env:
+        <<: *ubuntu_bionic_build
     - env:
         <<: *centos_build
     - env:
