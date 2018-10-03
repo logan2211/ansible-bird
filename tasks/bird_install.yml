@@ -13,22 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: bird_install_apt.yml
-  static: false
+- include_tasks: bird_install_apt.yml
   when:
     - ansible_pkg_mgr == 'apt'
   tags:
     - install-apt
 
-- include: bird_install_yum.yml
-  static: false
+- include_tasks: bird_install_yum.yml
   when:
     - ansible_pkg_mgr == 'yum'
   tags:
     - install-yum
 
-- include: bird_install_zypper.yml
-  static: false
+- include_tasks: bird_install_zypper.yml
   when:
     - ansible_pkg_mgr == 'zypper'
   tags:
