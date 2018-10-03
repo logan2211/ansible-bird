@@ -24,7 +24,7 @@
   tags:
     - always
 
-- include: bird_install.yml
+- include_tasks: bird_install.yml
 
 - name: Gather updated network facts
   setup:
