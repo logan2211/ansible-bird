@@ -51,7 +51,7 @@
   service:
     name: "{{ item.item.service }}"
     state: restarted
-  when: "item | changed"
+  when: "item is changed"
   ignore_errors: "{{ ansible_check_mode | default(false) }}"
   with_items: "{{ bird_results.results }}"
   tags:
