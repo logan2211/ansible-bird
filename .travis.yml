@@ -27,9 +27,6 @@ _opensuse_build: &opensuse_build
   CACHE_NAME: suse43
 
 # Ansible versions
-_ansible_24_build: &ansible_24_build
-  ansible_version: "'ansible>=2.4,<2.5'"
-
 _ansible_25_build: &ansible_25_build
   ansible_version: "'ansible>=2.5,<2.6'"
 
@@ -47,19 +44,6 @@ env:
 matrix:
   fast_finish: true
   include:
-    # ANSIBLE 2.4
-    - env:
-        <<: *ubuntu_xenial_build
-        <<: *ansible_24_build
-    - env:
-        <<: *ubuntu_bionic_build
-        <<: *ansible_24_build
-    - env:
-        <<: *centos_build
-        <<: *ansible_24_build
-    - env:
-        <<: *opensuse_build
-        <<: *ansible_24_build
     # ANSIBLE 2.5
     - env:
         <<: *ubuntu_xenial_build
