@@ -43,7 +43,7 @@
     mode: "0644"
   register: bird_results
   when: "item.enabled | bool"
-  with_items: "{{ bird_configs }}"
+  loop: "{{ bird_configs }}"
   tags:
     - bird-config
 
@@ -53,7 +53,7 @@
     state: restarted
   when: "item is changed"
   ignore_errors: "{{ ansible_check_mode | default(false) }}"
-  with_items: "{{ bird_results.results }}"
+  loop: "{{ bird_results.results }}"
   tags:
     - upstart-init
     - bird-init
@@ -66,7 +66,7 @@
   when:
     - "not item.enabled | bool"
     - "item.enabled != 'skip'"
-  with_items: "{{ bird_configs }}"
+  loop: "{{ bird_configs }}"
   ignore_errors: "{{ ansible_check_mode | default(false) }}"
   tags:
     - upstart-init
@@ -80,7 +80,7 @@
   when:
     - "item.enabled | bool"
     - "item.enabled != 'skip'"
-  with_items: "{{ bird_configs }}"
+  loop: "{{ bird_configs }}"
   ignore_errors: "{{ ansible_check_mode | default(false) }}"
   tags:
     - upstart-init
