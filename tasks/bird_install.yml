@@ -14,21 +14,21 @@
 # limitations under the License.
 
 - include: bird_install_apt.yml
-  static: no
+  static: false
   when:
     - ansible_pkg_mgr == 'apt'
   tags:
     - install-apt
 
 - include: bird_install_yum.yml
-  static: no
+  static: false
   when:
     - ansible_pkg_mgr == 'yum'
   tags:
     - install-yum
 
 - include: bird_install_zypper.yml
-  static: no
+  static: false
   when:
     - ansible_pkg_mgr == 'zypper'
   tags:

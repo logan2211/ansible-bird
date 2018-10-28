@@ -13,10 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#can be bird or epel
+# can be bird or epel
 bird_package_source: bird
 
-#bird configurations are stored in /etc on RHEL instead of /etc/bird
+# bird configurations are stored in /etc on RHEL instead of /etc/bird
 bird_conf_dir: /etc
 
 bird_keys: https://copr-be.cloud.fedoraproject.org/results/logan2211/bird/pubkey.gpg
@@ -36,6 +36,6 @@ bird_required_packages:
 bird_packages:
   - bird
 
-#RHEL uses a combined systemd unit for bird/bird6 called "bird" which manages
-#both daemons.
+# RHEL uses a combined systemd unit for bird/bird6 called "bird" which manages
+# both daemons.
 bird_ipv6_enabled: skip

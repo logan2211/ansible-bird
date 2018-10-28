@@ -60,9 +60,9 @@
 
 - name: Disable inactive BIRD BGP services and remove from bootup start
   service:
-   name: "{{ item.service }}"
-   enabled: no
-   state: stopped
+    name: "{{ item.service }}"
+    enabled: false
+    state: stopped
   when:
     - "not item.enabled | bool"
     - "item.enabled != 'skip'"
@@ -74,9 +74,9 @@
 
 - name: Start active BIRD BGP services and add to bootup start
   service:
-   name: "{{ item.service }}"
-   enabled: yes
-   state: started
+    name: "{{ item.service }}"
+    enabled: true
+    state: started
   when:
     - "item.enabled | bool"
     - "item.enabled != 'skip'"

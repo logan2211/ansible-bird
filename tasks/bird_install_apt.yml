@@ -44,7 +44,7 @@
   apt_repository:
     repo: "{{ bird_repo.repo }}"
     state: "{{ bird_repo.state }}"
-    update_cache: no
+    update_cache: false
   register: add_repos
   when: bird_repo is defined
   tags:

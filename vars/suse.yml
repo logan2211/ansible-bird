@@ -19,7 +19,7 @@ bird_package_source: bird
 # NOTE(hwoarang): openSUSE does not have a bird package easily available so we
 # use the same repository with RedHat.
 
-#bird configurations are stored in /etc on RHEL instead of /etc/bird
+# bird configurations are stored in /etc on RHEL instead of /etc/bird
 bird_conf_dir: /etc
 
 bird_keys: https://copr-be.cloud.fedoraproject.org/results/logan2211/bird/pubkey.gpg
@@ -31,7 +31,7 @@ bird_repo:
   description: COPR repository for BIRD packages on CentOS 7
   baseurl: "{{ bird_yum_repo_url }}"
   gpgkey: "{{ bird_keys }}"
-  repo_gpg_check: no
+  repo_gpg_check: false
 
 
 bird_required_packages: []
@@ -39,6 +39,6 @@ bird_required_packages: []
 bird_packages:
   - bird
 
-#RHEL uses a combined systemd unit for bird/bird6 called "bird" which manages
-#both daemons.
+# RHEL uses a combined systemd unit for bird/bird6 called "bird" which manages
+# both daemons.
 bird_ipv6_enabled: skip

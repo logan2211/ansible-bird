@@ -29,7 +29,7 @@
   zypper_repository:
     name: "{{ item.name }}"
     description: "{{ item.description }}"
-    autorefresh: yes
+    autorefresh: true
     repo: "{{ item.baseurl }}"
     enabled: "{{ item.enabled | default(omit) }}"
     priority: "{{ item.priority | default(omit) }}"
