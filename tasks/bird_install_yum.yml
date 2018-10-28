@@ -21,7 +21,8 @@
   until: add_keys is success
   retries: 5
   delay: 2
-  when: "{{ bird_package_source == 'bird' }}"
+  when:
+    - bird_package_source == 'bird'
   tags:
     - bird-keys
 
@@ -42,7 +43,8 @@
   delay: 2
   loop:
     - "{{ bird_repo }}"
-  when: "{{ bird_package_source == 'bird' }}"
+  when:
+    - bird_package_source == 'bird'
   tags:
     - bird-repos
 
@@ -55,6 +57,7 @@
   retries: 5
   delay: 2
   loop: "{{ bird_required_packages }}"
-  when: "{{ bird_package_source == 'epel' }}"
+  when:
+    - bird_package_source == 'epel'
   tags:
     - bird-yum-packages

@@ -12,4 +12,4 @@ reno>=1.8.0 # Apache2
 
 docker
 molecule==2.19
-ansible-lint==3.4.23
+ansible-lint==3.5.1
