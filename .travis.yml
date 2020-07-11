@@ -26,11 +26,6 @@ _centos_build: &centos_build
   docker_image_tag: centos-7
   CACHE_NAME: cent7
 
-_opensuse_build: &opensuse_build
-  docker_image_tag: opensuse-42.3
-  docker_command: /usr/lib/systemd/systemd
-  CACHE_NAME: suse43
-
 # Ansible versions
 _ansible_28_build: &ansible_28_build
   ansible_version: "'ansible>=2.8,<2.9'"
@@ -59,9 +54,6 @@ matrix:
     - env:
         <<: *centos_build
         <<: *ansible_28_build
-    - env:
-        <<: *opensuse_build
-        <<: *ansible_28_build
     # ANSIBLE STABLE
     - env:
         <<: *ubuntu_xenial_build
@@ -71,8 +63,6 @@ matrix:
         <<: *ubuntu_focal_build
     - env:
         <<: *centos_build
-    - env:
-        <<: *opensuse_build
 
 before_install:
   # Load cached docker images
