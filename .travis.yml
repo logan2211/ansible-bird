@@ -1,4 +1,5 @@
 ---
+distro: bionic
 language: python
 cache:
   timeout: 3600
@@ -27,11 +28,8 @@ _opensuse_build: &opensuse_build
   CACHE_NAME: suse43
 
 # Ansible versions
-_ansible_25_build: &ansible_25_build
-  ansible_version: "'ansible>=2.5,<2.6'"
-
-_ansible_26_build: &ansible_26_build
-  ansible_version: "'ansible>=2.6,<2.7'"
+_ansible_28_build: &ansible_28_build
+  ansible_version: "'ansible>=2.8,<2.9'"
 
 env:
   global:
@@ -44,32 +42,19 @@ env:
 matrix:
   fast_finish: true
   include:
-    # ANSIBLE 2.5
+    # ANSIBLE 2.8
     - env:
         <<: *ubuntu_xenial_build
-        <<: *ansible_25_build
+        <<: *ansible_28_build
     - env:
         <<: *ubuntu_bionic_build
-        <<: *ansible_25_build
+        <<: *ansible_28_build
     - env:
         <<: *centos_build
-        <<: *ansible_25_build
+        <<: *ansible_28_build
     - env:
         <<: *opensuse_build
-        <<: *ansible_25_build
-    # ANSIBLE 2.6
-    - env:
-        <<: *ubuntu_xenial_build
-        <<: *ansible_26_build
-    - env:
-        <<: *ubuntu_bionic_build
-        <<: *ansible_26_build
-    - env:
-        <<: *centos_build
-        <<: *ansible_26_build
-    - env:
-        <<: *opensuse_build
-        <<: *ansible_26_build
+        <<: *ansible_28_build
     # ANSIBLE STABLE
     - env:
         <<: *ubuntu_xenial_build
