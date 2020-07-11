@@ -13,17 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include_tasks: bird_install_apt.yml
-  when:
-    - ansible_pkg_mgr == 'apt'
-  tags:
-    - install-apt
-
-- include_tasks: bird_install_yum.yml
-  when:
-    - ansible_pkg_mgr == 'yum'
-  tags:
-    - install-yum
+- include_tasks: "bird_install_{{ ansible_pkg_mgr }}.yml"
 
 - name: Install bird packages
   package:

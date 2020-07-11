@@ -22,9 +22,13 @@ _ubuntu_focal_build: &ubuntu_focal_build
   docker_image_tag: ubuntu-focal
   CACHE_NAME: focal
 
-_centos_build: &centos_build
+_centos7_build: &centos7_build
   docker_image_tag: centos-7
   CACHE_NAME: cent7
+
+_centos8_build: &centos8_build
+  docker_image_tag: centos-8
+  CACHE_NAME: cent8
 
 # Ansible versions
 _ansible_28_build: &ansible_28_build
@@ -52,7 +56,10 @@ matrix:
         <<: *ubuntu_focal_build
         <<: *ansible_28_build
     - env:
-        <<: *centos_build
+        <<: *centos7_build
+        <<: *ansible_28_build
+    - env:
+        <<: *centos8_build
         <<: *ansible_28_build
     # ANSIBLE STABLE
     - env:
@@ -62,7 +69,9 @@ matrix:
     - env:
         <<: *ubuntu_focal_build
     - env:
-        <<: *centos_build
+        <<: *centos7_build
+    - env:
+        <<: *centos8_build
 
 before_install:
   # Load cached docker images

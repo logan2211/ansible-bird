@@ -1,5 +1,5 @@
 ---
-# Copyright 2016, Logan Vig <logan2211@gmail.com>
+# Copyright 2020, Logan Vig <logan2211@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,22 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-galaxy_info:
-  author: logan
-  description: Installation of BIRD BGP daemon
-  license: Apache2
-  min_ansible_version: 2.8
-  platforms:
-    - name: Ubuntu
-      versions:
-        - xenial
-        - bionic
-        - focal
-    - name: EL
-      versions:
-        - 7
-        - 8
-  galaxy_tags:
-    - networking
-    - bgp
-dependencies: []
+# can be bird or epel
+bird_package_source: epel
+
+# bird configurations are stored in /etc on RHEL instead of /etc/bird
+bird_conf_dir: /etc
+
+bird_required_packages:
+  - "{{ 'epel-release' if bird_package_source == 'epel' }}"
+
+bird_packages:
+  - bird
+
+# RHEL uses a combined systemd unit for bird/bird6 called "bird" which manages
+# both daemons.
+bird_ipv6_enabled: skip
