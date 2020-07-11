@@ -25,12 +25,6 @@
   tags:
     - install-yum
 
-- include_tasks: bird_install_zypper.yml
-  when:
-    - ansible_pkg_mgr == 'zypper'
-  tags:
-    - install-zypper
-
 - name: Install bird packages
   package:
     name: "{{ bird_packages }}"
