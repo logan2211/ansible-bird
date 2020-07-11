@@ -18,6 +18,10 @@ _ubuntu_bionic_build: &ubuntu_bionic_build
   docker_image_tag: ubuntu-bionic
   CACHE_NAME: bionic
 
+_ubuntu_focal_build: &ubuntu_focal_build
+  docker_image_tag: ubuntu-focal
+  CACHE_NAME: focal
+
 _centos_build: &centos_build
   docker_image_tag: centos-7
   CACHE_NAME: cent7
@@ -50,6 +54,9 @@ matrix:
         <<: *ubuntu_bionic_build
         <<: *ansible_28_build
     - env:
+        <<: *ubuntu_focal_build
+        <<: *ansible_28_build
+    - env:
         <<: *centos_build
         <<: *ansible_28_build
     - env:
@@ -60,6 +67,8 @@ matrix:
         <<: *ubuntu_xenial_build
     - env:
         <<: *ubuntu_bionic_build
+    - env:
+        <<: *ubuntu_focal_build
     - env:
         <<: *centos_build
     - env:
