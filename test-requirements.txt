@@ -11,5 +11,5 @@ doc8 # Apache-2.0
 reno>=1.8.0 # Apache2
 
 docker
-molecule==2.19
-ansible-lint==3.5.1
+molecule==3.0.5
+ansible-lint==4.2.0
