@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: molecule-bird
-    image: "${docker_image:-quay.io/loganv/docker-ci}:${docker_image_tag:-ubuntu-xenial}"
+    image: "${docker_image:-quay.io/loganv/docker-ci}:${docker_image_tag:-ubuntu-focal}"
     user: root
     command: ${docker_command:-/lib/systemd/systemd}
     volumes:
