@@ -43,19 +43,35 @@ bird_configs:
     filters: "{{ bird_ipv6_filters }}"
     protocols: "{{ bird_ipv6_protocols }}"
 
+# OS's default to version 1
+bird_major_version: 1
+
 bird_ipv4_includes: []
 bird_ipv4_filters: {}
-bird_ipv4_protocols: "{{ bird_default_protocols }}"
+bird_ipv4_protocols: "{{ lookup('vars',
+  'bird' ~ bird_major_version ~ '_default_protocols') }}"
 
 bird_ipv6_includes: []
 bird_ipv6_filters: {}
-bird_ipv6_protocols: "{{ bird_default_protocols }}"
+bird_ipv6_protocols: "{{ lookup('vars',
+  'bird' ~ bird_major_version ~ '_default_protocols') }}"
 
-bird_default_protocols:
+bird1_default_protocols:
   kernel: "{{ bird_protocols_kernel }}"
   device: "{{ bird_protocols_device }}"
 bird_protocols_kernel: |
   scan time 60;
   import none;
 bird_protocols_device: |
+  scan time 60;
+
+bird2_default_protocols:
+  kernel: "{{ bird2_protocols_kernel }}"
+  device: "{{ bird2_protocols_device }}"
+bird2_protocols_kernel: |
+  scan time 60;
+  ipv4 {
+    import none;
+  };
+bird2_protocols_device: |
   scan time 60;
