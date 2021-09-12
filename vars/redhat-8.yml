@@ -27,7 +27,3 @@ bird_required_packages:
 
 bird_packages:
   - bird
-
-# RHEL uses a combined systemd unit for bird/bird6 called "bird" which manages
-# both daemons.
-bird_ipv6_enabled: skip

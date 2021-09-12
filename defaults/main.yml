@@ -27,7 +27,7 @@ bird_gather_net_facts: true
 # Auto-enable bird/bird6 if an ipv4/ipv6 default route is present
 # Set to true/false to override auto detection
 bird_ipv4_enabled: detect
-bird_ipv6_enabled: detect
+bird_ipv6_enabled: "{{ 'detect' if bird_major_version == 1 else 'skip' }}"
 
 bird_configs:
   - config_file: "{{ bird_conf_dir }}/bird.conf"
