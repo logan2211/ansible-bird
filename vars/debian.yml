@@ -26,6 +26,5 @@ bird_repo:
   repo: "deb {{ bird_apt_repo_url }} {{ ansible_distribution_release }} main"
   state: "present"
 
-bird_required_packages: []
 bird_packages:
   - bird
