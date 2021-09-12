@@ -53,8 +53,8 @@
   service:
     name: "{{ item.item.service }}"
     state: restarted
-  when: "item is changed"
-  ignore_errors: "{{ ansible_check_mode | default(false) }}"
+  when: "item is changed" # noqa no-handler
+  ignore_errors: "{{ ansible_check_mode | default(false) }}" # noqa ignore-errors
   loop: "{{ bird_results.results }}"
   loop_control:
     label: "{{ item.item.service }}"
@@ -73,7 +73,7 @@
   loop: "{{ bird_configs }}"
   loop_control:
     label: "{{ item.service }}"
-  ignore_errors: "{{ ansible_check_mode | default(false) }}"
+  ignore_errors: "{{ ansible_check_mode | default(false) }}" # noqa ignore-errors
   tags:
     - upstart-init
     - bird-init
@@ -89,7 +89,7 @@
   loop: "{{ bird_configs }}"
   loop_control:
     label: "{{ item.service }}"
-  ignore_errors: "{{ ansible_check_mode | default(false) }}"
+  ignore_errors: "{{ ansible_check_mode | default(false) }}" # noqa ignore-errors
   tags:
     - upstart-init
     - bird-init
