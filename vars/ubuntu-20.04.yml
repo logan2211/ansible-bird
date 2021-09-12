@@ -17,5 +17,10 @@
 cache_timeout: 600
 
 bird_required_packages: []
-bird_packages:
+
+bird1_packages:
   - bird
+bird2_packages:
+  - bird2
+bird_packages: "{{ lookup('vars',
+  'bird' ~ bird_major_version ~ '_packages') }}"
