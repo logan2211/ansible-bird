@@ -15,6 +15,19 @@
 
 - include_tasks: "bird_install_{{ ansible_pkg_mgr }}.yml"
 
+- name: Use backport init-system-helpers package on Bionic for bird2
+  copy:
+    dest: /etc/apt/preferences.d/bird2-init-system-helpers
+    content: |
+      Package: init-system-helpers
+      Pin: release a=bionic-backports
+      Pin-Priority: 500
+    mode: 0644
+  when:
+    - bird_major_version == '2'
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'bionic'
+
 - name: Install bird packages
   package:
     name: "{{ bird_packages }}"
