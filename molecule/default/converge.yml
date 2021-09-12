@@ -1,5 +1,7 @@
 ---
 - name: Converge
   hosts: all
-  roles:
-    - role: "{{ playbook_dir | dirname | dirname | basename }}"
+  tasks:
+    - name: "Include ansible-bird"
+      include_role:
+        name: "{{ playbook_dir | dirname | dirname | basename }}"
