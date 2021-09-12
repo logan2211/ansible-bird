@@ -27,22 +27,42 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
+        name:
           - ubuntu-xenial
-          - ubuntu-bionic
-          - ubuntu-focal
+          - ubuntu-bionic-bird1
+          - ubuntu-bionic-bird2
+          - ubuntu-focal-bird1
+          - ubuntu-focal-bird2
           - centos-7
           - centos-8
         ansible_version:
           # Ansible latest
           - ansible
+        include:
+         - name: ubuntu-bionic-bird1
+           os: ubuntu-bionic
+           ansible_version: ansible
+           bird_version: 1
+         - name: ubuntu-bionic-bird2
+           os: ubuntu-bionic
+           ansible_version: ansible
+           bird_version: 2
+         - name: ubuntu-focal-bird1
+           os: ubuntu-focal
+           ansible_version: ansible
+           bird_version: 1
+         - name: ubuntu-focal-bird2
+           os: ubuntu-focal
+           ansible_version: ansible
+           bird_version: 2
     env:
       ANSIBLE_FORCE_COLOR: 1
       docker_image: quay.io/loganv/docker-ci
-      docker_image_tag: ${{ matrix.os }}
+      docker_image_tag: ${{ matrix.os || matrix.name }}
       docker_command: /lib/systemd/systemd
       cache_dir: $HOME/.docker
       ansible_version: ${{ matrix.ansible_version }}
+      BIRD_VERSION: ${{ matrix.bird_version }}
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
